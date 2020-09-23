@@ -17,130 +17,123 @@
 
 enum layers {
     _QWERTY = 0,
-    _LOWER,
-    _RAISE,
-    _ADJUST,
-    _NAV
+    _NUM = 1,
+    _NAV = 2,
+    _FUNC,
+    _RAISE
 };
 
-const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+enum custom_keycodes {
+  SBKSP
+};
 
+#define RAISE LT(_NUM, KC_ENT)
+#define LOWER LT(_NAV, KC_ENT)
+#define NAV_A LT(_NAV, KC_A)
+
+
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /*
  * Base Layer: QWERTY
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |  TAB   |   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  |  | \   |
+ * |  ESC   |   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  |  | \   |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * | NAV/ESC|   A  |   S  |  D   |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |  ' "   |
+ * |  TAB   | A/NAV|   S  |  D   |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |  ' "   |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | LCtrl  |   Z  |   X  |   C  |   V  |   B  | ESC  | Enter|  | Space| Del  |   N  |   M  | ,  < | . >  | /  ? | RShift |
+ * |  CTRL  |   Z  |   X  |   C  |   V  |   B  | SHIFT| Space|  | Enter| Del  |   N  |   M  | ,  < | . >  | /  ? | RShift |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        | XXXX | ALT  | LGui | Enter|LShift|  | Bkpc | Space| Ctrl | ALT  | XXXX |
- *                        |      |      |      | Raise|      |  |      | Lower|      |      |      |
-*                        `----------------------------------'  `----------------------------------'
+ *                        | XXXX | GUI  | ALT  |SHftBk| Enter|  | Enter| Space| GUI  | ALT  | XXXX |
+ *                        |      |      |      |      | Num  |  | Func |      |      |      |      |
+*                         `----------------------------------'  `----------------------------------'
  */
     [_QWERTY] = LAYOUT(
-      KC_TAB,       KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,                                                KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLASH,
-      LT(_NAV, KC_ESC),   KC_A,   KC_S,  KC_D,   KC_F,     KC_G,                                         KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
-      KC_LCTRL,                 KC_Z,   KC_X,  KC_C,   KC_V,     KC_B,   KC_ESC,  KC_ENT, KC_SPC, KC_DELETE, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_MINS,
-              XXXXXXX, KC_LALT, KC_LGUI, LT(_RAISE, KC_ENT),  KC_LSFT, KC_BSPC, LT(_LOWER, KC_SPC),KC_LCTRL, KC_LALT, XXXXXXX
+      KC_ESC,  KC_Q,   KC_W,   KC_E, KC_R, KC_T,                                        KC_Y,    KC_U,    KC_I,   KC_O,     KC_P, KC_BSLASH,
+      KC_TAB,  NAV_A,   KC_S,  KC_D,  KC_F, KC_G,                                        KC_H,    KC_J,    KC_K,   KC_L,  KC_SCLN,   KC_QUOT,
+      KC_LCTL, KC_Z,   KC_X,  KC_C,  KC_V, KC_B,   KC_LSFT,  KC_SPC, KC_ENT, KC_DELETE, KC_N,    KC_M, KC_COMM, KC_DOT,  KC_SLSH,   KC_MINS,
+               XXXXXXX, KC_LGUI, KC_LALT, SBKSP,  RAISE, LOWER, KC_SPC, KC_LGUI, KC_LALT, XXXXXXX
     ),
-/*
- * Lower Layer: Symbols
+/*v
+ * Lower Layer: NUM/symb
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |Alt+Tab |  !   |  @   |  [   |  ]   |  |   |                              |      |      |      |      |      |  | \   |
+ * |    `   |   1  |   2  |   3  |   4  |   5  |                              |   6  |   7  |   8  |   9  |   0  |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |  #   |  $   |  (   |  )   |  `   |                              |   +  |  -   |  /   |  *   |  %   |  ' "   |
+ * |        |   $  |   +  |   (  |   )  |   @  |                              |   ^  |   -  |   =  |   _  |   *  |    \   |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |  %   |  ^   |  {   |  }   |  ~   |      |      |  |      |      |   &  |  =   |  ,   |  .   |  / ? | - _    |
+ * |        |   !  |   #  |   {  |   }  |   ~  |      |      |  |      |      |   &  |   [  |   ]  |   %  |   |  |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |      |  ;   |  =   |  |  =   |  ;   |      |      |      |
- *                        |      |      |      |      |      |  |      |      |      |      |      |
- *                        `------------------S----------------'  `----------------------------------'
- */
-    [_LOWER] = LAYOUT(
-      _______, KC_EXLM, KC_AT,   KC_LBRC, KC_RBRC, KC_PIPE,                                     _______, _______, _______, _______, _______, KC_BSLS,
-      _______, KC_HASH, KC_DLR,  KC_LPRN, KC_RPRN, KC_GRV,                                      KC_PLUS, KC_MINS, KC_SLSH, KC_ASTR, KC_PERC, KC_QUOT,
-      _______, KC_PERC, KC_CIRC, KC_LCBR, KC_RCBR, KC_TILD, _______, _______, _______, _______, KC_AMPR, KC_EQL,  KC_COMM, KC_DOT,  KC_SLSH, KC_MINS,
-                                 _______, _______, _______, KC_SCLN, KC_EQL,  KC_EQL,  KC_SCLN, _______, _______, _______
-    ),
-/*123456789
-
- * Raise Layer: Number keys, media, navigation
- *
- * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |   1  |  2   |  3   |  4   |  5   |                              |  6   |  7   |  8   |  9   |  0   |        |
- * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |      | Prev | Play | Next | VolUp|                              | Left | Down | Up   | Right|      |        |
- * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |      |      |      | Mute | VolDn|      |      |  |      |      | MLeft| Mdown| MUp  |MRight|      |        |
- * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
- /*123456789
+	[_NUM] = LAYOUT(
+	KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                            KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
+	_______,  KC_DLR,  KC_PLUS, KC_LPRN, KC_RPRN, KC_AT,                                           KC_CIRC, KC_MINS, KC_EQL,  KC_UNDS, KC_ASTR, KC_BSLS,
+	_______, KC_EXLM, KC_HASH, KC_LCBR, KC_RCBR, KC_TILD, _______, _______,     _______, _______, KC_AMPR, KC_LBRC, KC_RBRC, KC_PERC, KC_PIPE, _______,
+							   _______, _______, _______, KC_BSPC, _______,     _______, _______, _______, _______, _______
+	),
+ /*
 
   * Raise Layer: Number keys, media, navigation
   *
   * ,-------------------------------------------.                              ,-------------------------------------------.
-  * |        |      |  7   |  8   |  9   |      |                              |  6   |  7   |  8   |  9   |  0   |        |
+  * |        |      |  7   |  8   |  9   |      |                              |      |      |      |      |      |        |
   * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
-  * |        |  0   |  4   |  5   |  6   |      |                              | Left | Down | Up   | Right|      |        |
+  * |        |  0   |  4   |  5   |  6   |      |                              |   +  |  -   |  /   |  *   |  ^   |        |
   * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
-  * |        |      |  1   |  2   |  3   |      |      |      |  |      |      | MLeft| Mdown| MUp  |MRight|      |        |
+  * |        |      |  1   |  2   |  3   |      |      |      |  |      |      |      |      |      |      |      |        |
   * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
   *                        |      |      |      |      |      |  |      |      |      |      |      |
   *                        |      |      |      |      |      |  |      |      |      |      |      |
-  *                        `----------------------------------'  `----------------------------------'
+  *            y            `----------------------------------'  `----------------------------------'
   */
     [_RAISE] = LAYOUT(
       _______, _______,    KC_7,    KC_8,    KC_9, _______,                                     _______, _______, _______, _______, _______, _______,
-      _______,    KC_0,    KC_4,    KC_5,    KC_6, _______,                                     _______, _______, _______, _______, _______, _______,
+      _______,    KC_0,    KC_4,    KC_5,    KC_6, _______,                                     KC_PLUS, KC_MINS, KC_SLSH, KC_ASTR, KC_CIRC, _______,
       _______, _______,    KC_1,    KC_2,    KC_3, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
+
 /*
  * Adjust Layer: Function keys, RGB
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        | F1   |  F2  | F3   | F4   | F5   |                              | F6   | F7   |  F8  | F9   | F10  |        |
+ * | F12    | F1   | F2   | F3   | F4   | F5   |                              | F6   | F7   | F8   | F9   | F10  | F11    |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        | TOG  | SAI  | HUI  | VAI  | MOD  |                              |      |      |      | F11  | F12  |        |
+ * | SHIFT  | TOG  | SAI  | VAI  | HUI  | MOD  |                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |      | SAD  | HUD  | VAD  | RMOD |      |      |  |      |      |      |      |      |      |      |        |
+ * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
-    [_ADJUST] = LAYOUT(
-      _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                                       KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  _______,
-      _______, RGB_TOG, RGB_SAI, RGB_HUI, RGB_VAI, RGB_MOD,                                     _______, _______, _______, KC_F11,  KC_F12,  _______,
-      _______, _______, RGB_SAD, RGB_HUD, RGB_VAD, RGB_RMOD,_______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+    [_FUNC] = LAYOUT(
+       KC_F12, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                                         KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,
+      KC_LSFT, RGB_TOG, RGB_SAI, RGB_VAI, RGB_HUI, RGB_MOD,                                     _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
 /*
  * NAV Layer: Arrow Keys, Media, Page
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        | Left | Up   |      |      |      |                              |      |      |  MUp |      |      |        |
+ * |        |      |      |      |      |      |                              |      |      |  MUp |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |      | Down | Right| PgUp |      |                              |      |MLeft |MDown |MRight|MB1   |        |
+ * |        |      | Left | Down |  Up  | Right|                              |      |MLeft |MDown |MRight|MB1   |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |      |      |      | PgDn |      |      |      |  |      |      |      |      |      |      |      |        |
+ * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------' *
  */
     [_NAV] = LAYOUT(
-       _______, KC_LEFT,  KC_UP, _______, _______, _______,                                     _______, _______, KC_MS_U, _______, _______, _______,
-       _______, _______, KC_DOWN, KC_RGHT, KC_PGUP, _______,                                     _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_BTN1, _______,
-       _______, _______, _______, _______, KC_PGDN, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-                                   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+       _______, _______, _______, _______, _______, _______,                                     _______, _______, KC_MS_U, _______, _______, _______,
+       _______, _______, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,                                       _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_BTN1, _______,
+       _______, _______, _______, _______, _______, _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+                                  _______, _______, _______, KC_BSPC, _______, _______, _______, _______, _______, _______
     ),
 
 
@@ -167,8 +160,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+    return update_tri_layer_state(state, _NUM, _NAV, _FUNC);
 }
+
+void keyboard_post_init_user(void) {
+    // Call the post init code.
+
+    // Default RGB settings, without saving settings
+    rgblight_enable_noeeprom();
+    rgblight_sethsv_noeeprom(HSV_CORAL);
+    rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
+}
+
 
 #ifdef OLED_DRIVER_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
@@ -209,24 +212,24 @@ static void render_status(void) {
         case _QWERTY:
             oled_write_P(PSTR("Default\n"), false);
             break;
-        case _LOWER:
-            oled_write_P(PSTR("Lower\n"), false);
+        case _NUM:
+            oled_write_P(PSTR("Num\n"), false);
             break;
-        case _RAISE:
-            oled_write_P(PSTR("Raise\n"), false);
+        case _NAV:
+            oled_write_P(PSTR("Nav\n"), false);
             break;
-        case _ADJUST:
-            oled_write_P(PSTR("Adjust\n"), false);
+        case _FUNC:
+            oled_write_P(PSTR("Fn\n"), false);
             break;
         default:
             oled_write_P(PSTR("Undefined\n"), false);
     }
 
     // Host Keyboard LED Status
-    uint8_t led_usb_state = host_keyboard_leds();
-    oled_write_P(IS_LED_ON(led_usb_state, USB_LED_NUM_LOCK) ? PSTR("NUMLCK ") : PSTR("       "), false);
-    oled_write_P(IS_LED_ON(led_usb_state, USB_LED_CAPS_LOCK) ? PSTR("CAPLCK ") : PSTR("       "), false);
-    oled_write_P(IS_LED_ON(led_usb_state, USB_LED_SCROLL_LOCK) ? PSTR("SCRLCK ") : PSTR("       "), false);
+//    uint8_t led_usb_state = host_keyboard_leds();
+//    oled_write_P(IS_LED_ON(led_usb_state, USB_LED_NUM_LOCK) ? PSTR("NUMLCK ") : PSTR("       "), false);
+//    oled_write_P(IS_LED_ON(led_usb_state, USB_LED_CAPS_LOCK) ? PSTR("CAPLCK ") : PSTR("       "), false);
+//    oled_write_P(IS_LED_ON(led_usb_state, USB_LED_SCROLL_LOCK) ? PSTR("SCRLCK ") : PSTR("       "), false);
 }
 
 void oled_task_user(void) {
@@ -238,23 +241,62 @@ void oled_task_user(void) {
 }
 #endif
 
-#ifdef ENCODER_ENABLE
-void encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) {
-        // Volume control
-        if (clockwise) {
-            tap_code(KC_VOLU);
-        } else {
-            tap_code(KC_VOLD);
-        }
-    }
-    else if (index == 1) {
-        // Page up/Page down
-        if (clockwise) {
-            tap_code(KC_PGDN);
-        } else {
-            tap_code(KC_PGUP);
-        }
-    }
+//#ifdef ENCODER_ENABLE
+//void encoder_update_user(uint8_t index, bool clockwise) {
+//    if (index == 0) {
+//        // Volume control
+//        if (clockwise) {
+//            tap_code(KC_VOLU);
+//        } else {
+//            tap_code(KC_VOLD);
+//        }
+//    }
+//    else if (index == 1) {
+//        // Page up/Page down
+//        if (clockwise) {
+//            tap_code(KC_PGDN);
+//        } else {
+//            tap_code(KC_PGUP);
+//        }
+//    }
+//}
+//#endif
+//bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+//    switch (keycode) {
+//        case LT(_NAV, KC_A):
+//            return true;
+//        default:
+//            return false;
+//    }
+//}
+//
+//bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
+//    switch (keycode) {
+//        case LT(_NAV, KC_A):
+//            return true;
+//        default:
+//            return false;
+//    }
+//}
+bool bksp = false;
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+	switch (keycode) {
+		case SBKSP:
+			if (record->event.pressed) {
+				register_code(KC_LSFT);
+				bksp = true;
+			}
+			else {
+				unregister_code(KC_LSFT);
+				if (bksp) {
+					tap_code(KC_BSPC);
+				}
+			}
+			return false;
+			break;
+
+	}
+	bksp = false;
+	return true;
+
 }
-#endif
