@@ -18,9 +18,6 @@
 
 #ifdef OLED_DRIVER_ENABLE
   #define OLED_DISPLAY_128X64
-#endif
-
-#ifdef RGBLIGHT_ENABLE
   #define RGBLIGHT_ANIMATIONS
   #define RGBLIGHT_HUE_STEP 8
   #define RGBLIGHT_SAT_STEP 8
@@ -28,9 +25,17 @@
   #define RGBLIGHT_LIMIT_VAL 150
 #endif
 
+
+#define ENCODER_RESOLUTION 2
+#define ENCODER_DIRECTION_FLIP
+
+
+#define EE_HANDS
+#define TAPPING_TERM 150
 #define PERMISSIVE_HOLD
 #define IGNORE_MOD_TAP_INTERRUPT
 //#define PERMISSIVE_HOLD_PER_KEY
-//#define IGNORE_MOD_TAP_INTERRUPT_PER_KEY// If you are using an Elite C rev3 on the slave side, uncomment the lines below:
+//#define IGNORE_MOD_TAP_INTERRUPT_PER_KEY
+// If you are using an Elite C rev3 on the slave side, uncomment the lines below:
 // #define SPLIT_USB_DETECT
 // #define NO_USB_STARTUP_CHECK
