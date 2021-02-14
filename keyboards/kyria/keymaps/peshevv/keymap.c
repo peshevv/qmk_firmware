@@ -19,11 +19,13 @@
 
 
 enum layers {
+    _MAC,
     _QWERTY,
     _NUM,
     _NAV,
     _GAME,
-    _GAMERAISE
+    _GAMERAISE,
+	
 
 };
 
@@ -45,12 +47,14 @@ enum custom_keycodes {
 // };
 
 
-#define RAISE LT(_NUM, KC_ENT)
+#define RAISE LT(_NUM, KC_DEL)
 #define LOWER LT(_NAV, KC_ENT)
-#define NAV_TB LT(_NAV, KC_TAB)
-#define NAV_A LT(_NAV, KC_A)
+#define HOME_D LSFT_T(KC_D)
+#define HOME_K RSFT_T(KC_K)
 #define GAME TO(_GAME)
 #define GRAISE MO(_GAMERAISE)
+#define WinOS TO(_QWERTY)
+#define MacOS TO(_MAC)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -70,10 +74,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
     [_QWERTY] = LAYOUT(
       KC_ESC,  KC_Q, KC_W,  KC_E,   KC_R,    KC_T,                                          KC_Y,    KC_U,    KC_I,   KC_O,     KC_P, KC_BSLASH,
-      KC_TAB,  KC_A, KC_S,  KC_D,   KC_F,    KC_G,                                          KC_H,    KC_J,    KC_K,   KC_L,  KC_SCLN,   KC_QUOT,
+      KC_TAB,  KC_A, KC_S,HOME_D,   KC_F,    KC_G,                                          KC_H,    KC_J,  HOME_K,   KC_L,  KC_SCLN,   KC_QUOT,
       KC_LCTL, KC_Z, KC_X,  KC_C,   KC_V,    KC_B, KC_LSFT, KC_INS,     KC_PSCR, KC_DEL,    KC_N,    KC_M, KC_COMM, KC_DOT,  KC_SLSH,   KC_RCTL,
-                         SCRTGL, KC_LGUI, KC_LALT,  KC_SPC,  LOWER,       RAISE,  SBKSP, KC_RALT, KC_LGUI,  KC_F13
+                         SCRTGL, KC_LGUI, KC_LALT,  KC_SPC,  LOWER,       RAISE,KC_BSPC, KC_RALT, KC_LGUI,  KC_F13
     ),
+
+/* This is at est
+ * Base Layer: MAC
+ *
+ * ,-------------------------------------------.                              ,-------------------------------------------.
+ * |  ESC   |   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  |  | \   |
+ * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+ * |  TAB   |   A  |   S  |   D  |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |  ' "   |
+ * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+ * |  CTRL  |   Z  |   X  |   C  |   V  |   B  | SHIFT| Ins  |  |PrntSc| Del  |   N  |   M  | ,  < | . >  | /  ? | RCTRL  |
+ * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
+ *                        |SCRTGL| GUI  | ALT  |ShftBk| Enter|  | Bspc | Space| GUI  | ALT  | F13  |
+ *                        |      |      |      |      | Nav  |  | Num  |      |      |      |      |
+ *                        `----------------------------------'  `----------------------------------'
+*/
+    [_MAC] = LAYOUT(
+      KC_ESC,  KC_Q, KC_W,  KC_E,   KC_R,    KC_T,                                          KC_Y,    KC_U,    KC_I,   KC_O,     KC_P, KC_BSLASH,
+      KC_TAB,  KC_A, KC_S,HOME_D,   KC_F,    KC_G,                                          KC_H,    KC_J,  HOME_K,   KC_L,  KC_SCLN,   KC_QUOT,
+      KC_LOPT, KC_Z, KC_X,  KC_C,   KC_V,    KC_B, KC_LSFT, KC_INS,     KC_PSCR, KC_DEL,    KC_N,    KC_M, KC_COMM, KC_DOT,  KC_SLSH,   KC_ROPT,
+                         SCRTGL, KC_LCTL, KC_LCMD,  KC_SPC,  LOWER,       RAISE,KC_BSPC, KC_RCMD, KC_RCTL,  KC_F13
+    ),
+    
 /*
  * Lower Layer: NUM/symb
  *
@@ -87,12 +113,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        | Mute |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
-	[_NUM] = LAYOUT(
-	 KC_GRV,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                            KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_PIPE,
-	_______,  KC_DLR, KC_PLUS, KC_LPRN, KC_RPRN,   KC_AT,                                         KC_CIRC, KC_MINS,  KC_EQL, KC_UNDS, KC_ASTR, KC_BSLS,
-	_______, KC_EXLM, KC_HASH, KC_LCBR, KC_RCBR, KC_TILD, _______, _______,        Snip, _______, KC_AMPR, KC_LBRC, KC_RBRC, KC_PERC, _______, _______,
-							   KC_MUTE, _______, _______, _______, _______,     _______, _______, _______, _______, _______
-	),
+    [_NUM] = LAYOUT(
+     KC_GRV,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                            KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_PIPE,
+    _______,  KC_DLR, KC_PLUS, KC_LPRN, KC_RPRN,   KC_AT,                                         KC_CIRC, KC_MINS,  KC_EQL, KC_UNDS, KC_ASTR, KC_BSLS,
+    _______, KC_EXLM, KC_HASH, KC_LCBR, KC_RCBR, KC_TILD,   WinOS,   MacOS,        Snip, _______, KC_AMPR, KC_LBRC, KC_RBRC, KC_PERC, _______, _______,
+                               KC_MUTE, _______, _______, _______, _______,     _______, _______, _______, _______, _______
+    ),
 
 /*
  * NAV Layer: Arrow Keys, Media, Page
@@ -188,21 +214,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 bool bksp = false;
 bool mouseScroll = true;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-	switch (keycode) {
-		case SBKSP:
-			if (record->event.pressed) {
-				register_code(KC_LSFT);
-				bksp = true;
-			}
-			else {
-				unregister_code(KC_LSFT);
-				if (bksp) {
-					tap_code(KC_BSPC);
-				}
-			}
-			return false;
-			break;
-		case PgFwd:
+    switch (keycode) {
+        case SBKSP:
+            if (record->event.pressed) {
+                register_code(KC_LSFT);
+                bksp = true;
+            }
+            else {
+                unregister_code(KC_LSFT);
+                if (bksp) {
+                    tap_code(KC_BSPC);
+                }
+            }
+            return false;
+            break;
+        case PgFwd:
             if (record->event.pressed) {
                 SEND_STRING(SS_LCTL(SS_TAP(X_PGDN)));
             }
@@ -235,14 +261,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
             break;
 
-	}
-	bksp = false;
-	return true;
+    }
+    bksp = false;
+    return true;
 }
 
 #ifdef OLED_DRIVER_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-	return OLED_ROTATION_180;
+    return OLED_ROTATION_180;
 }
 
 #define IDLE_FRAMES 5
@@ -271,7 +297,10 @@ static void render_status(void) {
     oled_write_P(PSTR("Layer: "), false);
     switch (get_highest_layer(layer_state)) {
         case _QWERTY:
-            oled_write_P(PSTR("QWERTY\n"), false);
+            oled_write_P(PSTR("Windows\n"), false);
+            break;
+        case _MAC:
+            oled_write_P(PSTR("Mac\n"), false);
             break;
         case _NUM:
             oled_write_P(PSTR("Num\n"), false);
@@ -285,6 +314,7 @@ static void render_status(void) {
         default:
             oled_write_P(PSTR("Undefined\n"), false);
     }
+    
     oled_write_P(PSTR("Scroll: "), false);
     if (mouseScroll) {
         oled_write_P(PSTR("Mouse\n"), false);
