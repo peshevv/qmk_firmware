@@ -29,6 +29,7 @@
 #define ENCODER_RESOLUTION 2
 #define ENCODER_DIRECTION_FLIP
 #define COMBO_COUNT 1
+#define COMBO_TERM 150
 
 
 #define EE_HANDS

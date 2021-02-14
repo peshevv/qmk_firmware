@@ -38,13 +38,12 @@ enum custom_keycodes {
 };
 
 // Combo Initialization
-// enum combos {
-//     ENT_SNIP
-// const uint16_t PROGMEM entprint_combo[] = {KC_ENT, KC_PSCR, COMBO_END};
+ enum combos {
+     CAP_LOCK
+ };
+ const uint16_t PROGMEM capslock_combo[] = {KC_SPC, KC_BSPC, COMBO_END};
 
-// combo_t key_combos[COMBO_COUNT] = {
-//   [ENT_SNIP] = COMBO(entprint_combo, Snip)
-// };
+ combo_t key_combos[COMBO_COUNT] = {COMBO(capslock_combo, KC_CAPS)};
 
 
 #define RAISE LT(_NUM, KC_DEL)
