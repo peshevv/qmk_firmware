@@ -25,7 +25,7 @@ enum layers {
     _NAV,
     _GAME,
     _GAMERAISE,
-	
+
 
 };
 
@@ -54,6 +54,17 @@ enum custom_keycodes {
 #define GRAISE MO(_GAMERAISE)
 #define WinOS TO(_QWERTY)
 #define MacOS TO(_MAC)
+
+#ifdef TAPPING_TERM_PER_KEY
+    uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case RAISE:
+            return 125;
+        default:
+            return TAPPING_TERM;
+    }
+}
+#endif
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -98,7 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_LOPT, KC_Z, KC_X,  KC_C,   KC_V,    KC_B, KC_LSFT, KC_INS,     KC_PSCR, KC_DEL,    KC_N,    KC_M, KC_COMM, KC_DOT,  KC_SLSH,   KC_ROPT,
                          SCRTGL, KC_LCTL, KC_LCMD,  KC_SPC,  LOWER,       RAISE,KC_BSPC, KC_RCMD, KC_RCTL,  KC_F13
     ),
-    
+
 /*
  * Lower Layer: NUM/symb
  *
@@ -313,7 +324,7 @@ static void render_status(void) {
         default:
             oled_write_P(PSTR("Undefined\n"), false);
     }
-    
+
     oled_write_P(PSTR("Scroll: "), false);
     if (mouseScroll) {
         oled_write_P(PSTR("Mouse\n"), false);
